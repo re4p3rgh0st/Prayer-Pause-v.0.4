@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self'; script-src 'self'; img-src 'self' data:">
+  <title>Prayer Pause</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="drag"></div>
+  <svg class="scene" viewBox="0 0 1000 620" preserveAspectRatio="xMaxYMax slice" aria-hidden="true">
+    <defs>
+      <radialGradient id="glow"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    </defs>
+    <circle cx="640" cy="130" r="190" fill="url(#glow)"/>
+    <circle cx="640" cy="130" r="72" class="moon"/>
+    <g class="stars"><circle cx="120" cy="60" r="1.6"/><circle cx="260" cy="150" r="1.2"/><circle cx="410" cy="40" r="1.5"/><circle cx="520" cy="210" r="1.2"/><circle cx="860" cy="70" r="1.6"/><circle cx="930" cy="190" r="1.2"/><circle cx="780" cy="30" r="1.2"/><circle cx="330" cy="95" r="1"/></g>
+    <g class="mosque">
+      <rect x="520" y="430" width="470" height="70"/><path d="M640 430 Q640 330 720 330 Q800 330 800 430Z"/><rect x="716" y="300" width="8" height="32"/>
+      <rect x="560" y="360" width="22" height="75"/><path d="M557 360 L571 320 L585 360Z"/><rect x="900" y="300" width="24" height="135"/><path d="M896 300 L912 250 L928 300Z"/>
+      <path d="M590 430 Q590 395 620 395 Q650 395 650 430Z"/><path d="M810 430 Q810 395 840 395 Q870 395 870 430Z"/>
+    </g>
+    <rect x="500" y="500" width="500" height="120" fill="url(#water)"/>
+  </svg>
+
+  <aside class="side">
+    <div class="brand"><svg viewBox="0 0 40 40" class="logo"><path d="M8 34V22h24v12zM11 22Q11 10 20 10Q29 10 29 22" /><path d="M20 3v7"/></svg><div><div class="bname">Prayer Pause</div><div class="tag">Pause. Pray. Reset.</div></div></div>
+    <nav>
+      <button class="nav active" data-page="home"><span>⌂</span>Home</button>
+      <button class="nav" data-page="mosque"><span>▦</span>Mosque Timings</button>
+      <button class="nav" data-page="settings"><span>⚙</span>Settings</button>
+      <button class="nav" data-page="about"><span>ⓘ</span>About</button>
+    </nav>
+    <div class="quote"><div class="ar" lang="ar" dir="rtl">الصلاة نور الحياة</div><div>Prayer is the light of life.</div></div>
+  </aside>
+
+  <main class="content">
+    <button class="gear" data-page="settings" title="Settings">⚙</button>
+
+    <section id="page-home" class="page active">
+      <div class="date" id="date"></div>
+      <div class="clock"><span id="clock">--:--:--</span> <small id="ampm"></small></div>
+      <div class="loc">⌖ <span id="loc">Lahore, Pakistan</span></div>
+      <div class="row">
+        <div class="glass next">
+          <div class="orb">☪</div>
+          <div class="grow"><div class="dim">Next Prayer</div><div class="big" id="nextName">…</div><div id="nextIn" class="dim2"></div></div>
+          <div class="vr"></div>
+          <div class="grow"><span class="chip">☾ Prayer Pause</span><p id="nextNote" class="dim2"></p></div>
+        </div>
+      </div>
+      <div class="row two">
+        <div class="glass times">
+          <div class="head"><span>▦ Today's Prayer Times</span><span class="dim" id="updated"></span></div>
+          <ul id="list"></ul>
+        </div>
+        <div class="glass stat">
+          <div class="head"><span>⛨ Prayer Pause Status</span></div>
+          <div class="ring" id="ring">✓</div>
+          <div class="big2" id="status">Active</div>
+          <div class="dim2" id="statusSub"></div>
+          <button id="test" class="link">Try a test session</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-mosque" class="page">
+      <h2>Mosque Timings</h2>
+      <p class="dim2">Enter the exact times shown on your mosque's digital clock (24-hour, Asia/Karachi). When turned on, these replace the calculated times.</p>
+      <div class="glass form" id="mosqueForm">
+        <label class="sw"><input type="checkbox" data-path="mosque.enabled"> Use my mosque's timings</label>
+        <div class="grid5">
+          <label>Fajr<input type="time" data-path="mosque.times.fajr"></label>
+          <label>Dhuhr<input type="time" data-path="mosque.times.dhuhr"></label>
+          <label>Asr<input type="time" data-path="mosque.times.asr"></label>
+          <label>Maghrib<input type="time" data-path="mosque.times.maghrib"></label>
+          <label>Isha<input type="time" data-path="mosque.times.isha"></label>
+        </div>
+        <p class="dim2">Leave a prayer blank to use the calculated time for just that prayer.</p>
+        <button class="btn" data-save="mosqueForm">Save mosque timings</button> <span class="msg"></span>
+      </div>
+    </section>
+
+    <section id="page-settings" class="page">
+      <h2>Settings</h2>
+      <div id="settingsForm">
+        <div class="glass form"><h3>Location &amp; calculation</h3>
+          <div class="grid3">
+            <label>City name<input type="text" data-path="location.name"></label>
+            <label>Latitude<input type="number" step="0.0001" data-path="location.lat"></label>
+            <label>Longitude<input type="number" step="0.0001" data-path="location.lng"></label>
+            <label>Calculation method<select id="method" data-path="method"></select></label>
+            <label>Asr calculation<select data-path="asr"><option value="hanafi">Hanafi</option><option value="shafi">Shafi / Maliki / Hanbali</option></select></label>
+            <label>Time zone<input type="text" value="Asia/Karachi" disabled></label>
+          </div>
+          <h3>Manual adjustment (minutes)</h3>
+          <div class="grid5">
+            <label>Fajr<input type="number" data-path="adjustments.fajr"></label><label>Dhuhr<input type="number" data-path="adjustments.dhuhr"></label>
+            <label>Asr<input type="number" data-path="adjustments.asr"></label><label>Maghrib<input type="number" data-path="adjustments.maghrib"></label>
+            <label>Isha<input type="number" data-path="adjustments.isha"></label>
+          </div>
+        </div>
+        <div class="glass form"><h3>Prayer sessions</h3>
+          <div class="grid3">
+            <label>Pause length (minutes)<input type="number" min="1" max="60" data-path="session.minutes"></label>
+            <label>Heads-up before prayer (minutes, 0 = off)<input type="number" min="0" max="10" data-path="session.warnMinutes"></label>
+          </div>
+          <div class="checks">
+            <label><input type="checkbox" data-path="prayerEnabled.fajr"> Fajr</label><label><input type="checkbox" data-path="prayerEnabled.dhuhr"> Dhuhr</label>
+            <label><input type="checkbox" data-path="prayerEnabled.asr"> Asr</label><label><input type="checkbox" data-path="prayerEnabled.maghrib"> Maghrib</label>
+            <label><input type="checkbox" data-path="prayerEnabled.isha"> Isha</label>
+          </div>
+        </div>
+        <div class="glass form"><h3>App restrictions</h3>
+          <label class="sw"><input type="checkbox" data-path="restrictions.enabled"> Restrict apps during prayer sessions</label>
+          <div class="checks"><label><input type="checkbox" data-path="restrictions.roblox"> Roblox</label><label><input type="checkbox" data-path="restrictions.steam"> Steam</label></div>
+          <div class="dim">Microsoft apps to restrict</div><div class="checks" id="msApps"></div>
+          <label>Other apps (one .exe name per line, e.g. game.exe)<textarea id="custom" rows="3"></textarea></label>
+          <label class="sw"><input type="checkbox" data-path="restrictions.forceClose"> Force-close apps that don't close politely after 8 seconds (unsaved work in them can be lost)</label>
+          <p class="dim2">Windows Explorer, Windows Security, Task Manager, shutdown/restart and essential Windows processes are never touched.</p>
+        </div>
+        <div class="glass form"><h3>Ending a prayer session early</h3>
+          <p class="dim2">To end a real prayer session early, you scan a QR code with your phone and photograph your prayer mat (your phone and PC must be on the same Wi-Fi). With an Anthropic API key saved, the photo is checked by AI to confirm it shows a prayer mat. Without a key, any photo is accepted.</p>
+          <label>Anthropic API key (stored encrypted on this PC)<input type="password" id="apiKey" autocomplete="off" placeholder="sk-ant-..."></label>
+          <button class="btn" id="saveKey">Save key</button> <span class="msg" id="keyMsg"></span>
+          <p class="dim2" id="keyStatus"></p>
+        </div>
+        <div class="glass form"><h3>Notifications, sound &amp; startup</h3>
+          <label class="sw"><input type="checkbox" data-path="notifications"> Show notifications</label>
+          <label class="sw"><input type="checkbox" data-path="sound.enabled"> Play a soft chime when a prayer session starts</label>
+          <label>Volume<input type="range" min="0" max="1" step="0.05" data-path="sound.volume"></label>
+          <label class="sw"><input type="checkbox" data-path="startup.openAtLogin"> Start Prayer Pause with Windows (runs in the tray)</label>
+        </div>
+        <button class="btn" data-save="settingsForm">Save settings</button> <span class="msg"></span>
+      </div>
+    </section>
+
+    <section id="page-about" class="page">
+      <h2>About</h2>
+      <div class="glass form">
+        <p>Prayer Pause calculates your prayer times, then pauses selected apps for a short prayer session at each one.</p>
+        <p class="dim2">It works by asking the chosen apps to close while a session runs. It changes no Windows settings or services, so quitting the app or finishing the session always restores normal access. It cannot guarantee every program is blocked.</p>
+        <p class="dim2">Prayer times by the open-source Adhan library. Version 0.4.0.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="foot"><span>♡ May Allah accept our prayers.</span><span class="dim">● Running in background</span></footer>
+  <script src="js/app.js"></script>
+</body>
+</html>
